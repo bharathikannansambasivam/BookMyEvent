@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 
 const protect = (req, res, next) => {
-  console.log(req);
   const token = req.cookies.accessToken;
   if (!token) {
     return res.status(401).json({
