@@ -6,13 +6,19 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
 import movieRoutes from "./routes/movieRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
-
+import cors from "cors";
 import "./config/redis.js";
-
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -20,7 +26,6 @@ app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/movies", movieRoutes);
 app.use("/bookings", bookingRoutes);
-
 app.get("/", (req, res) => {
   res.send("Server Running");
 });
