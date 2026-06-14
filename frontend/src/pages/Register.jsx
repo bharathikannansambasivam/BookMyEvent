@@ -21,7 +21,7 @@ function Register() {
     onSubmit: async (values) => {
       try {
         setIsLoading(true);
-        console.log(values);
+
         const response = await api.post("/auth/register", values);
 
         if (response.data.message) {
@@ -29,8 +29,7 @@ function Register() {
           navigate("/login");
         }
       } catch (error) {
-        console.log(error);
-        alert(error.response);
+        alert(error.response?.data?.message || "Registration Failed");
       } finally {
         setIsLoading(false);
       }
@@ -38,36 +37,39 @@ function Register() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-lg overflow-hidden flex">
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="w-full max-w-5xl bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl flex">
         {/* Left Side */}
-        <div className="hidden md:flex md:w-1/2 bg-orange-500 text-white p-10 flex-col justify-between">
+        <div className="hidden md:flex md:w-2/5 bg-gradient-to-br from-orange-400 to-orange-500 p-10 flex-col justify-between text-white">
           <div>
-            <h1 className="text-4xl font-bold">BookMyEvent 🎬</h1>
+            <h1 className="text-5xl font-bold">BookMyEvent</h1>
 
-            <p className="mt-4 text-orange-100">
+            <p className="mt-4 text-orange-100 text-lg">
               Create an account and start booking movies.
             </p>
           </div>
 
-          <div className="space-y-3">
-            <p>🎟 Book tickets instantly</p>
-            <p>🍿 Browse latest movies</p>
-            <p>📱 Easy booking experience</p>
+          <div className="space-y-4 text-lg">
+            <p>Book tickets instantly</p>
+            <p>Browse latest movies</p>
+            <p>Easy booking experience</p>
           </div>
         </div>
 
         {/* Right Side */}
-        <div className="w-full md:w-1/2 p-8 flex items-center">
-          <form onSubmit={formik.handleSubmit} className="w-full space-y-4">
+        <div className="w-full md:w-3/5 p-8 md:p-12 flex items-center bg-zinc-900">
+          <form onSubmit={formik.handleSubmit} className="w-full space-y-5">
             <div>
-              <h2 className="text-3xl font-bold">Create Account</h2>
+              <h2 className="text-4xl font-bold text-white">Create Account</h2>
 
-              <p className="text-gray-500 mt-2">Join BookMyEvent today.</p>
+              <p className="text-zinc-400 mt-2">Join BookMyEvent today.</p>
             </div>
 
+            {/* Username */}
             <div>
-              <label className="text-sm font-medium">Username</label>
+              <label className="text-sm font-medium text-zinc-300">
+                Username
+              </label>
 
               <input
                 type="text"
@@ -76,7 +78,18 @@ function Register() {
                 value={formik.values.username}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full mt-1 border p-3 rounded-xl focus:outline-none focus:border-orange-500"
+                className="
+                  w-full
+                  mt-2
+                  bg-zinc-800
+                  border
+                  border-zinc-700
+                  text-white
+                  p-3
+                  rounded-xl
+                  focus:outline-none
+                  focus:border-orange-500
+                "
               />
 
               {formik.touched.username && formik.errors.username && (
@@ -86,8 +99,9 @@ function Register() {
               )}
             </div>
 
+            {/* Email */}
             <div>
-              <label className="text-sm font-medium">Email</label>
+              <label className="text-sm font-medium text-zinc-300">Email</label>
 
               <input
                 type="email"
@@ -96,7 +110,18 @@ function Register() {
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full mt-1 border p-3 rounded-xl focus:outline-none focus:border-orange-500"
+                className="
+                  w-full
+                  mt-2
+                  bg-zinc-800
+                  border
+                  border-zinc-700
+                  text-white
+                  p-3
+                  rounded-xl
+                  focus:outline-none
+                  focus:border-orange-500
+                "
               />
 
               {formik.touched.email && formik.errors.email && (
@@ -106,8 +131,11 @@ function Register() {
               )}
             </div>
 
+            {/* Password */}
             <div>
-              <label className="text-sm font-medium">Password</label>
+              <label className="text-sm font-medium text-zinc-300">
+                Password
+              </label>
 
               <input
                 type="password"
@@ -116,7 +144,18 @@ function Register() {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full mt-1 border p-3 rounded-xl focus:outline-none focus:border-orange-500"
+                className="
+                  w-full
+                  mt-2
+                  bg-zinc-800
+                  border
+                  border-zinc-700
+                  text-white
+                  p-3
+                  rounded-xl
+                  focus:outline-none
+                  focus:border-orange-500
+                "
               />
 
               {formik.touched.password && formik.errors.password && (
@@ -129,12 +168,21 @@ function Register() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold"
+              className="
+                w-full
+                bg-orange-500
+                hover:bg-orange-600
+                text-white
+                py-3
+                rounded-xl
+                font-semibold
+                transition-all
+              "
             >
               {isLoading ? "Creating Account..." : "Create Account"}
             </button>
 
-            <p className="text-center text-sm">
+            <p className="text-center text-sm text-zinc-400">
               Already have an account?{" "}
               <span
                 onClick={() => navigate("/login")}

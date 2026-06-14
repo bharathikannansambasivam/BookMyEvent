@@ -70,9 +70,13 @@ export const login = async (req, res) => {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-
     res.status(200).json({
       message: "Login Success",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -82,12 +86,18 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  res.clearCookie("accessToken");
-  res.clearCookie("refreshToken");
+  try {
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
 
-  res.json({
-    message: "Logged Out Successfully",
-  });
+    res.status(200).json({
+      message: "Logout Success",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 
 export const refreshToken = async (req, res) => {

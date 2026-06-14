@@ -56,7 +56,11 @@ export const getSeats = async (req, res) => {
           const reserved = await redisClient.get(key);
 
           if (reserved) {
-            status = "reserved";
+            if (reserved === req.userId) {
+              status = "my-reserved";
+            } else {
+              status = "reserved";
+            }
           }
         }
 
@@ -84,7 +88,7 @@ export const reserveSeat = async (req, res) => {
 
       const existingSeat = await redisClient.get(key);
 
-      if (existingSeat) {
+      if (existingSeat && existingSeat !== req.userId) {
         return res.status(400).json({
           message: `${seat} already reserved`,
         });
@@ -121,4 +125,20 @@ export const getMyBookings = async (req, res) => {
       message: error.message,
     });
   }
+};
+
+export const unreserveSeat = async (req, res) => {
+  const { seatNumber } = req.body;
+
+  const key = `seat:${req.params.id}:${seatNumber}`;
+
+  const reservedBy = await redisClient.get(key);
+
+  if (reservedBy === req.userId) {
+    await redisClient.del(key);
+  }
+
+  res.status(200).json({
+    message: "Seat unreserved",
+  });
 };

@@ -10,7 +10,7 @@ function Booking() {
   const movieId = location.state?.movieId;
 
   const [movie, setMovie] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(120);
+  const [timeLeft, setTimeLeft] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const ticketPrice = 150;
@@ -21,11 +21,11 @@ function Booking() {
   }, []);
 
   useEffect(() => {
+    if (timeLeft === null) return;
+
     if (timeLeft <= 0) {
       alert("Reservation expired");
-
       navigate(`/movies/${movieId}/seats`);
-
       return;
     }
 
@@ -35,7 +35,6 @@ function Booking() {
 
     return () => clearInterval(timer);
   }, [timeLeft]);
-
   const fetchMovie = async () => {
     try {
       const response = await api.get(`/movies/${movieId}`);
@@ -45,7 +44,15 @@ function Booking() {
       console.log(error);
     }
   };
+  useEffect(() => {
+    const expiry = Number(localStorage.getItem("reservationExpiry"));
 
+    if (!expiry) return;
+
+    const remaining = Math.floor((expiry - Date.now()) / 1000);
+
+    setTimeLeft(remaining > 0 ? remaining : 0);
+  }, []);
   const handleConfirmBooking = async () => {
     try {
       setLoading(true);
@@ -56,6 +63,7 @@ function Booking() {
       });
 
       alert(response.data.message);
+      localStorage.removeItem("reservationExpiry");
 
       navigate("/my-bookings");
     } catch (error) {
@@ -72,60 +80,88 @@ function Booking() {
   const seconds = String(timeLeft % 60).padStart(2, "0");
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="bg-white rounded-3xl shadow-lg p-8 w-full max-w-2xl">
-        <h1 className="text-3xl font-bold text-center">Booking Summary</h1>
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl p-6">
+        <h1 className="text-2xl font-bold text-center text-white">
+          Booking Summary
+        </h1>
 
-        <div className="mt-8 space-y-4">
-          <div>
-            <h2 className="font-semibold text-gray-500">Movie</h2>
+        <div className="mt-5 bg-orange-500/10 border border-orange-500 rounded-xl p-4 text-center">
+          <p className="text-orange-400 text-sm">
+            Reservation expires in{" "}
+            <span className="font-bold">
+              {minutes}:{seconds}
+            </span>
+          </p>
+        </div>
 
-            <p className="text-xl font-bold">{movie?.title || "Loading..."}</p>
-          </div>
-
-          <div>
-            <h2 className="font-semibold text-gray-500">Theatre</h2>
-
-            <p className="text-xl font-bold">BK Cinemas</p>
-          </div>
-
-          <div>
-            <h2 className="font-semibold text-gray-500">Seats</h2>
-
-            <p className="text-xl font-bold">{selectedSeats.join(", ")}</p>
-          </div>
-
-          <div>
-            <h2 className="font-semibold text-gray-500">Tickets</h2>
-
-            <p className="text-xl font-bold">{selectedSeats.length}</p>
-          </div>
+        <div className="mt-6 flex gap-4 items-center">
+          <img
+            src={movie?.poster}
+            alt={movie?.title}
+            className="w-20 h-28 rounded-xl object-cover"
+          />
 
           <div>
-            <h2 className="font-semibold text-gray-500">Price Per Ticket</h2>
+            <h2 className="text-2xl font-semibold text-white">
+              {movie?.title || "Loading..."}
+            </h2>
 
-            <p className="text-xl font-bold">₹{ticketPrice}</p>
-          </div>
+            <p className="text-zinc-400 mt-1">BK Cinemas</p>
 
-          <div>
-            <h2 className="font-semibold text-gray-500">Total Amount</h2>
+            <div className="flex gap-2 mt-2">
+              <span className="bg-zinc-800 text-zinc-300 px-2 py-1 rounded-lg text-xs">
+                {movie?.language}
+              </span>
 
-            <p className="text-2xl font-bold text-green-600">₹{totalAmount}</p>
+              <span className="bg-zinc-800 text-zinc-300 px-2 py-1 rounded-lg text-xs">
+                {movie?.duration}
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="mt-8 bg-red-50 border border-red-200 rounded-xl p-4 text-center">
-          <p className="text-red-600 font-semibold">Reservation expires in</p>
+        <div className="mt-6">
+          <p className="text-sm text-zinc-400 mb-3">Selected Seats</p>
 
-          <h2 className="text-3xl font-bold text-red-600">
-            {minutes}:{seconds}
-          </h2>
+          <div className="flex flex-wrap gap-2">
+            {selectedSeats.map((seat) => (
+              <span
+                key={seat}
+                className="px-3 py-1 bg-orange-500 text-white rounded-full text-sm font-medium"
+              >
+                {seat}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-6 border-t border-zinc-700 pt-4 space-y-3">
+          <div className="flex justify-between">
+            <span className="text-zinc-400">Tickets</span>
+
+            <span className="font-semibold text-white">
+              {selectedSeats.length}
+            </span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-zinc-400">Price / Ticket</span>
+
+            <span className="font-semibold text-white">₹{ticketPrice}</span>
+          </div>
+
+          <div className="flex justify-between text-lg font-bold">
+            <span className="text-white">Total Amount</span>
+
+            <span className="text-orange-500">₹{totalAmount}</span>
+          </div>
         </div>
 
         <button
           onClick={handleConfirmBooking}
           disabled={loading}
-          className="w-full mt-8 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold disabled:bg-gray-400"
+          className="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition-all disabled:bg-zinc-700"
         >
           {loading ? "Booking..." : "Confirm Booking"}
         </button>

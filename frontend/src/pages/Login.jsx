@@ -22,9 +22,14 @@ function Login() {
         setIsLoading(true);
 
         const response = await api.post("/auth/login", values);
-
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            username: response.data.user.username,
+          })
+        );
         if (response.data.message === "Login Success") {
-          navigate("/");
+          navigate("/movies");
         }
       } catch (error) {
         alert(error.response?.data?.message);
@@ -35,19 +40,19 @@ function Login() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-lg overflow-hidden flex">
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="w-full max-w-5xl bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl flex">
         {/* Left Side */}
-        <div className="hidden md:flex md:w-1/2 bg-orange-400 text-white p-10 flex-col justify-between">
+        <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-orange-400 to-orange-500 p-10 flex-col justify-between text-white">
           <div>
-            <h1 className="text-4xl font-bold">BookMyEvent 🎬</h1>
+            <h1 className="text-5xl font-bold">BookMyEvent</h1>
 
-            <p className="mt-4 text-orange-100">
+            <p className="mt-4 text-orange-100 text-lg">
               Book movie tickets in seconds.
             </p>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4 text-lg">
             <p>🎟 Easy Ticket Booking</p>
             <p>🍿 Browse Latest Movies</p>
             <p>📱 Mobile Friendly Experience</p>
@@ -55,19 +60,20 @@ function Login() {
         </div>
 
         {/* Right Side */}
-        <div className="w-full md:w-1/2 p-8 flex items-center">
-          <form onSubmit={formik.handleSubmit} className="w-full space-y-4">
+        <div className="w-full md:w-3/5 p-8 md:p-12 flex items-center bg-zinc-900">
+          {" "}
+          <form onSubmit={formik.handleSubmit} className="w-full space-y-5">
             <div>
-              <h2 className="text-3xl font-bold">Welcome Back</h2>
+              <h2 className="text-4xl font-bold text-white">Welcome Back</h2>
 
-              <p className="text-gray-500 mt-2">
+              <p className="text-zinc-400 mt-2">
                 Login to continue booking movies.
               </p>
             </div>
 
             {/* Email */}
             <div>
-              <label className="text-sm font-medium">Email</label>
+              <label className="text-sm font-medium text-zinc-300">Email</label>
 
               <input
                 type="email"
@@ -76,7 +82,18 @@ function Login() {
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full mt-1 border p-3 rounded-xl focus:outline-none focus:border-orange-500"
+                className="
+                w-full
+                mt-2
+                bg-zinc-800
+                border
+                border-zinc-700
+                text-white
+                p-3
+                rounded-xl
+                focus:outline-none
+                focus:border-orange-500
+              "
               />
 
               {formik.touched.email && formik.errors.email && (
@@ -88,7 +105,9 @@ function Login() {
 
             {/* Password */}
             <div>
-              <label className="text-sm font-medium">Password</label>
+              <label className="text-sm font-medium text-zinc-300">
+                Password
+              </label>
 
               <input
                 type="password"
@@ -97,7 +116,18 @@ function Login() {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className="w-full mt-1 border p-3 rounded-xl focus:outline-none focus:border-orange-500"
+                className="
+                w-full
+                mt-2
+                bg-zinc-800
+                border
+                border-zinc-700
+                text-white
+                p-3
+                rounded-xl
+                focus:outline-none
+                focus:border-orange-500
+              "
               />
 
               {formik.touched.password && formik.errors.password && (
@@ -110,12 +140,21 @@ function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-orange-400 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold"
+              className="
+              w-full
+              bg-orange-500
+              hover:bg-orange-600
+              text-white
+              py-3
+              rounded-xl
+              font-semibold
+              transition-all
+            "
             >
               {isLoading ? "Logging In..." : "Login"}
             </button>
 
-            <p className="text-center text-sm">
+            <p className="text-center text-sm text-zinc-400">
               Don't have an account?{" "}
               <span
                 onClick={() => navigate("/register")}

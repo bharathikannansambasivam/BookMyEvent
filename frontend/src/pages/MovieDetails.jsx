@@ -42,9 +42,9 @@ function MovieDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-black text-white">
       <div className="max-w-6xl mx-auto p-6">
-        <div className="bg-white rounded-3xl shadow-lg overflow-hidden md:flex">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden md:flex shadow-2xl">
           {/* Poster */}
           <div className="md:w-1/3">
             <img
@@ -56,34 +56,36 @@ function MovieDetails() {
 
           {/* Details */}
           <div className="md:w-2/3 p-8">
-            <h1 className="text-4xl font-bold">{movie.title}</h1>
+            <h1 className="text-5xl font-bold">{movie.title}</h1>
 
-            <div className="flex gap-3 mt-4 flex-wrap">
-              <span className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm">
+            <div className="flex gap-3 mt-5 flex-wrap">
+              <span className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-medium">
                 {movie.genre}
               </span>
 
-              <span className="bg-gray-100 px-3 py-1 rounded-full text-sm">
+              <span className="bg-zinc-800 text-zinc-300 px-4 py-2 rounded-full text-sm">
                 {movie.language}
               </span>
 
-              <span className="bg-gray-100 px-3 py-1 rounded-full text-sm">
+              <span className="bg-zinc-800 text-zinc-300 px-4 py-2 rounded-full text-sm">
                 {movie.duration}
               </span>
             </div>
 
-            <p className="text-gray-600 mt-6 leading-7">{movie.description}</p>
+            <p className="text-zinc-400 mt-8 leading-8 text-lg">
+              {movie.description}
+            </p>
 
-            <div className="mt-8 border-t pt-6">
-              <h3 className="text-xl font-bold">BK Cinemas</h3>
+            <div className="mt-10 border-t border-zinc-700 pt-6">
+              <h3 className="text-2xl font-bold">BK Cinemas</h3>
 
-              <p className="text-gray-500 mt-1">Kumbakonam, Tamil Nadu</p>
+              <p className="text-zinc-400 mt-2">Kumbakonam, Tamil Nadu</p>
 
-              <p className="text-sm text-gray-400 mt-2">Today • 7:00 PM</p>
+              <p className="text-sm text-zinc-500 mt-2">Today • 7:00 PM</p>
 
               <button
-                onClick={navigate(`/movies/${movie._id}/seats`)}
-                className="mt-5 bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold"
+                onClick={() => navigate(`/movies/${movie._id}/seats`)}
+                className="mt-6 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-semibold transition-all"
               >
                 Select Seats
               </button>
@@ -93,10 +95,12 @@ function MovieDetails() {
       </div>
 
       {error && (
-        <div className="mt-4 flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl">
-          <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+        <div className="max-w-4xl mx-auto mt-4">
+          <div className="flex items-center gap-2 bg-red-500/10 border border-red-500 text-red-400 px-4 py-3 rounded-xl">
+            <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
 
-          <span className="text-sm font-medium">{error}</span>
+            <span className="text-sm font-medium">{error}</span>
+          </div>
         </div>
       )}
     </div>
