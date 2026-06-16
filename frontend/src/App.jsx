@@ -11,6 +11,7 @@ import MyBookings from "./pages/MyBookings";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 
+import "./socket.js";
 function App() {
   return (
     <BrowserRouter>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../services/api";
+import socket from "../socket";
 
 function SeatSelection() {
   const { id } = useParams();
@@ -11,7 +12,20 @@ function SeatSelection() {
   useEffect(() => {
     fetchSeats();
   }, []);
+  useEffect(() => {
+    socket.on("seat-reserved", (data) => {
+      console.log("Received socket Event:", data);
 
+      if (data.movieId === id) {
+        fetchSeats();
+      }
+    });
+
+    return () => {
+      console.log("Removing seat-reserved listener");
+      socket.off("seat-reserved");
+    };
+  }, [id]);
   const handleContinue = async () => {
     try {
       await api.post(`/movies/${id}/reserve`, {

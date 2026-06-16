@@ -1,7 +1,7 @@
 import Movie from "../models/Movie.js";
 import redisClient from "../config/redis.js";
 import Booking from "../models/Booking.js";
-
+import { io } from "../server.js";
 export const getMovies = async (req, res) => {
   try {
     const movies = await Movie.find();
@@ -99,10 +99,13 @@ export const reserveSeat = async (req, res) => {
       const key = `seat:${req.params.id}:${seat}`;
 
       await redisClient.set(key, req.userId, {
-        EX: 120,
+        EX: 500,
       });
     }
-
+    io.emit("seat-reserved", {
+      movieId: req.params.id,
+      seatNumbers,
+    });
     res.status(200).json({
       message: "Seats reserved successfully",
     });
