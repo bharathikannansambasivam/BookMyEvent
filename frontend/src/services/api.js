@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://54.86.236.14:5000",
+  baseURL: "https://54.86.236.14.sslip.io",
   withCredentials: true,
 });
 
@@ -11,7 +11,7 @@ api.interceptors.response.use(
     if (err.response?.status === 401) {
       try {
         await axios.post(
-          "http://54.86.236.14:5000/auth/refresh",
+          "https://54.86.236.14.sslip.io/auth/refresh",
           {},
           { withCredentials: true }
         );
