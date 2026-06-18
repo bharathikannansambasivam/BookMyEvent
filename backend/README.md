@@ -1,30 +1,49 @@
 # BookMyEvent 🎬
 
-Movie ticket booking application built with the MERN stack.
+A real-time movie ticket booking platform built with the MERN stack.
 
 ## Features
 
-- Authentication (JWT + Refresh Token)
-- Browse Movies
-- View Movie Details
-- Seat Selection
-- Redis Seat Reservation
-- Multi-Seat Booking
-- My Bookings
+* User Authentication (JWT & Refresh Tokens)
+* Browse Movies
+* View Movie Details
+* Real-Time Seat Reservation
+* Redis-Based Seat Locking
+* Socket.IO Real-Time Updates
+* Multi-Seat Booking
+* My Bookings
+
+## Application Flow
+
+```text
+Login / Signup
+      ↓
+Fetch Movies
+      ↓
+Select Seats
+      ↓
+Redis Seat Lock
+      ↓
+Socket.IO Real-Time Update
+      ↓
+Confirm Booking
+      ↓
+Booking Saved in MongoDB
+```
 
 ## Tech Stack
 
-- React
-- Node.js
-- Express.js
-- MongoDB
-- Redis
+* React
+* Node.js
+* Express.js
+* MongoDB
+* Redis
+* Socket.IO
 
-## Setup
+## Live Demo
 
-```env
-PORT=5000
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
-REFRESH_SECRET=your_refresh_secret
-```
+https://bookmyevent32323.onrender.com/
+
+## AWS Deployment
+
+https://54.86.236.14.sslip.io/
